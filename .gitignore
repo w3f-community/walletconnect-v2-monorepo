@@ -23,7 +23,6 @@ build
 .DS_Store
 .makeFlags*
 .env
-*nix
 zip
 .idea
 .rts2_cache_*
