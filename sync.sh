@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -e
+
 githash=$(git rev-parse --short master)
 changes=$(git diff --name-only master HEAD)
 noChanges=true
@@ -18,6 +20,7 @@ fi
 
 git checkout master --quiet -- servers/relay
 git reset --quiet servers/relay
+rm -rf src test tstconfig.json package-lock.json package.json LICENSE READMEME.md
 mv servers/relay/* .
 rm -rf ./servers
 git add .
