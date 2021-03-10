@@ -10,27 +10,30 @@ let
     inherit nodeEnv;
     inherit (pkgs) fetchurl fetchgit nix-gitignore stdenv lib;
   };
+  package = builtins.fromJSON (builtins.readFile ./package.json);
 in rec {
   relay = pkgs.stdenv.mkDerivation {
-    pname = "relay";
-    version = "1.1.0";
-    src = pkgs.nix-gitignore.gitignoreSource [ "ops" ] ./.;
+    pname = builtins.replaceStrings [ "@" "/" ] [ "_at_" "_slash_" ] package.name;
+    version = "v${package.version}";
+    src = pkgs.nix-gitignore.gitignoreSource [ "result" ] ./.;
     buildInputs = [ pkgs.nodejs-14_x ];
     buildPhase = ''
       export HOME=$TMP
+      mkdir -p $out
       ln -s ${relayPackages.nodeDependencies}/lib/node_modules ./node_modules
     '';
     installPhase = ''
-      mkdir -p $out
-      ${pkgs.nodejs-14_x}/bin/npm run --prefix compile
-      cp -r . $out/
-      export PATH=${pkgs.nodejs-14_x}/bin:$out:$PATH
+      ${pkgs.nodejs-14_x}/bin/npm run compile
+      ln -s ${relayPackages.nodeDependencies}/lib/node_modules $out/node_modules
+      cp -r dist/ $out/
+      cp -r package.json $out/
+      export PATH=${pkgs.nodejs-14_x}/bin:$PATH
     '';
   };
   docker = pkgs.dockerTools.buildLayeredImage {
     name = relay.pname;
     config = {
-      Cmd = [ "${pkgs.nodejs-14_x}/bin/node" "${relay}/relay/dist" ];
+      Cmd = [ "${pkgs.nodejs-14_x}/bin/node" "${relay}" ];
     };
   };
 }
