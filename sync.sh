@@ -16,7 +16,6 @@ if $noChanges; then
   exit 0
 fi
 
-rm -rf *
 git checkout master --quiet -- servers/relay
 git reset --quiet servers/relay
 mv servers/relay/* .
