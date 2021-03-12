@@ -20,7 +20,7 @@ fi
 
 git checkout master --quiet -- servers/relay
 git reset --quiet servers/relay
-rm -rf src test tstconfig.json package-lock.json package.json LICENSE READMEME.md
+rm -rf src test tstconfig.json package-lock.json package.json LICENSE README.md packages
 mv servers/relay/* .
 rm -rf ./servers
 git add .

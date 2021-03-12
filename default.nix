@@ -1,4 +1,7 @@
-{ pkgs ? import (import ./nix/sources.nix).nixpkgs {} }:
+{ 
+pkgs ? import (import ./nix/sources.nix).nixpkgs {}
+, githash ? ""
+}:
 let
   nodeEnv = import ./node-env.nix {
     inherit pkgs;
@@ -34,6 +37,9 @@ in rec {
     name = "relay";
     config = {
       Cmd = [ "${pkgs.nodejs-14_x}/bin/node" "${relay}/dist" ];
+      Env = [
+        "GITHASH=${githash}"
+      ];
     };
   };
 }
