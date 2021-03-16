@@ -35,6 +35,7 @@ in rec {
   };
   docker = pkgs.dockerTools.buildLayeredImage {
     name = "relay";
+    created = "now";
     config = {
       Cmd = [ "${pkgs.nodejs-14_x}/bin/node" "${relay}/dist" ];
       Env = [
