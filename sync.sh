@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+rm -rf node_modules
+
 githash=$(git rev-parse --short master)
 changes=$(git diff --name-only master HEAD)
 noChanges=true
